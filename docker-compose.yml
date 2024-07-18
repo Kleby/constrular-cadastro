@@ -1,0 +1,32 @@
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: 1001
+      MYSQL_DATABASE: constrular
+      MYSQL_USER: jkleby
+      MYSQL_PASSWORD: 1001
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  api:
+    build: ./api
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/constrular
+      SPRING_DATASOURCE_USERNAME: jkleby
+      SPRING_DATASOURCE_PASSWORD: 1001
+
+  angular:
+    build: ./angular
+    ports:
+      - "4200:80"
+
+volumes:
+  mysql-data:
